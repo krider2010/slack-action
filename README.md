@@ -18,6 +18,34 @@ Here's what the Slack message would look like:
 
 <img src="docs/images/slack-message-example.png" width="540">
 
+## Alternative Usage
+
+If you want to create a message conditionally on previous actions in the same workflow, you can make use of the shared workspace that is persisted throughout a flow being run. You would do that by removing args and setting an environment variable.
+
+```workflow
+action "Post message to Slack" {
+  uses = "pullreminders/slack-action@master"
+  secrets = [
+    "SLACK_BOT_TOKEN"
+  ]
+  env = {
+      MESSAGE_FILE = "slack-message.json"
+  }
+}
+```
+
+In which case it would look for a file named $GITHUB_WORKSPACE/slack-message.json and expect that to be the JSON payload to send to Slack. This JSON file should be formatted as documented below.
+
+A simple example of this JSON file to match the args example would be:
+```json
+{
+    channel: "C1234567890",
+    text: "Hello world"
+}
+```
+
+This is a good way of getting values from previous actions in a workflow to use in messages sent to Slack.
+
 ## Setup
 
 To use this GitHub Action you'll first need to create a Slack App and install it to your Slack workspace.
